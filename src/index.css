@@ -1,7 +1,11 @@
+@import "tailwindcss";
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
   line-height: 1.5;
   font-weight: 400;
-
 }
-@import "tailwindcss";
+
+*:focus {
+  outline: none;
+}
