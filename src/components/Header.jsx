@@ -32,7 +32,7 @@ const Header = () => {
       <div className="w-full bg-blue-500 px-2 py-2 text-2xl text-white flex justify-between">
         <h1>Fincancly.</h1>
         {user && (
-          <p className="text-lg" onClick={logoutHandler}>
+          <p className="text-lg cursor-pointer" onClick={logoutHandler}>
             Logout
           </p>
         )}
