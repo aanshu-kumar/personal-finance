@@ -4,6 +4,7 @@ import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
+import userIcon from "../assets/usericon.jpeg";
 
 const Header = () => {
   const [user, loading] = useAuthState(auth);
@@ -29,12 +30,19 @@ const Header = () => {
   }
   return (
     <div className="stickey top-0 left-0">
-      <div className="w-full bg-blue-500 px-2 py-2 text-2xl text-white flex justify-between">
+      <div className="w-full bg-blue-500 px-5 py-2 text-2xl text-white flex justify-between">
         <h1>Fincancly.</h1>
         {user && (
-          <p className="text-lg cursor-pointer" onClick={logoutHandler}>
-            Logout
-          </p>
+          <div className="flex gap-2 justify-center items-center">
+            <img
+              src={user.photoURL ? user.photoURL : userIcon}
+              className="w-8 h-8 rounded-full"></img>
+            <p
+              className=" tracking-wide text-sm cursor-pointer font-semibold hover:text-blue-800 px-1.5 duration-100 rounded-lg"
+              onClick={logoutHandler}>
+              Logout
+            </p>
+          </div>
         )}
       </div>
     </div>
