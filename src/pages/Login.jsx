@@ -81,6 +81,7 @@ const Login = () => {
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
+        // eslint-disable-next-line no-unused-vars
         const token = credential.accessToken;
         const user = result.user;
         console.log(user)
