@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Button, Radio, Select, Table } from "antd";
 import { Option } from "antd/es/mentions";
+import { unparse } from "papaparse";
 import { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
@@ -53,6 +54,24 @@ const TransactionTable = ({ transaction }) => {
       return 0;
     }
   })
+  function exportCsv(){
+    console.log(transaction)
+    let csv = unparse({
+      fields: ["Name","Type","Tag","Date","Amount"],
+      data:transaction.map((item)=>{
+        let arr =[item.name,item.type,item.tag,item.date,item.amount]
+        return arr
+      })
+    })
+    const blob = new Blob([csv],{type: "text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Transactions.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
   return (
     <>
       <div className="w-[98%] flex flex-row flex-wrap gap-1 justify-center items-center mx-auto my-5 ">
@@ -85,7 +104,7 @@ const TransactionTable = ({ transaction }) => {
         <Radio.Button value="amount">Sort By Amount</Radio.Button>
         </Radio.Group>
         <div className="space-x-2">
-          <Button>Export CSV</Button>
+          <Button onClick={exportCsv}>Export CSV</Button>
           <Button type="primary">Import CSV</Button>
         </div>
         </div>

@@ -91,7 +91,11 @@ const Dashboard = () => {
   return (
     <>
       {loading ? (
-        <p>Loading</p>
+        <div className=" w-full mt-40 flex justify-center items-center h-[60vh] gap-4">
+        
+          <div className="loader"></div>
+          <p>Loading your Data...</p>
+        </div>
       ) : (
         <div>
           <Cards
