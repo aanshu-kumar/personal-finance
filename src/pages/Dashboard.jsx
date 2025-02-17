@@ -9,6 +9,8 @@ import { auth, db } from "../firebase";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { toast } from "react-toastify";
 import TransactionTable from "../components/TransactionTable";
+import Chart from "../components/Chart";
+import NoTransition from "../components/NoTransition";
 const Dashboard = () => {
   const [user] = useAuthState(auth);
   const [isIncomeVisible, setIsIncomeVisible] = useState(false);
@@ -54,22 +56,22 @@ const Dashboard = () => {
       name: value.Name,
     };
     // console.log(value.Date)
-    addTransaction(newTransaction);
+    addTransaction(newTransaction,false);
   };
-  async function addTransaction(newtransaction) {
+  async function addTransaction(newtransaction,many) {
     try {
       const docRef = await addDoc(
         collection(db, `user/${user.uid}/transactions`),
         newtransaction
       );
       console.log("Document written with ID: ", docRef.id);
-      toast.success("transaction Added!");
+      if(!many)toast.success("transaction Added!");
       let newArray = transaction;
       newArray.push(newtransaction);
       setTransaction(newArray);
       calculateSum();
     } catch (e) {
-      console.log("Error while adding document:", e.message);
+      if(!many)console.log("Error while adding document:", e.message);
     }
   }
 
@@ -87,6 +89,9 @@ const Dashboard = () => {
     setIncome(Income);
     setExpanse(Expanse);
   }
+  const sortedTransition = transaction.sort((a,b)=>{
+    return new Date(a.date) - new Date(b.date);
+  })
 
   return (
     <>
@@ -115,7 +120,8 @@ const Dashboard = () => {
             setIsExpanseVisible={setIsExpanseVisible}
             onFinish={onFinish}
           />
-          <TransactionTable transaction={transaction}/>
+          {transaction.length==0 ?<NoTransition/> :<Chart sortedTransition={sortedTransition}></Chart>}
+          <TransactionTable transaction={transaction} fetchTransition={fetchTransition} addTransaction={addTransaction}/>
         </div>
       )}
     </>
