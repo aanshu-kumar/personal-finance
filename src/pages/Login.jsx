@@ -108,7 +108,7 @@ const Login = () => {
           signupWithGmail={signupWithGmail}
         />
       ) : (
-        <div className="p-5 w-1/3 border-2 border-gray-100 rounded-lg shadow-sm shadow-gray-300">
+        <div className="p-5 w-full md:w-1/2 lg:w-1/3 border-2 border-gray-100 rounded-lg shadow-sm shadow-gray-300">
           <p className=" text-center my-4 text-xl font-semibold">
             SignUp on <span className="text-blue-500">Financly.</span>
           </p>
@@ -199,7 +199,7 @@ function UserLoginComponent({ setUserLogin, signupWithGmail }) {
   }
 
   return (
-    <div className="p-5 w-1/3 border-2 border-gray-100 rounded-lg shadow-sm shadow-gray-300">
+    <div className="p-5 w-full md:w-2/3 lg:w-1/3 border-2 border-gray-100 rounded-lg shadow-sm shadow-gray-300">
       <p className=" text-center my-4 text-xl font-semibold">
         Login to <span className="text-blue-500">Financly.</span>
       </p>

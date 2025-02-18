@@ -9,6 +9,9 @@
 *:focus {
   outline: none;
 }
+body{
+  max-width: 2000px;
+}
 
 /* HTML: <div class="loader"></div> */
 .loader {

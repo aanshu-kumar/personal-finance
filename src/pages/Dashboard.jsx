@@ -10,6 +10,7 @@ import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { toast } from "react-toastify";
 import TransactionTable from "../components/TransactionTable";
 import Chart from "../components/Chart";
+import { deleteDoc, doc } from "firebase/firestore";
 import NoTransition from "../components/NoTransition";
 const Dashboard = () => {
   const [user] = useAuthState(auth);
@@ -56,22 +57,22 @@ const Dashboard = () => {
       name: value.Name,
     };
     // console.log(value.Date)
-    addTransaction(newTransaction,false);
+    addTransaction(newTransaction, false);
   };
-  async function addTransaction(newtransaction,many) {
+  async function addTransaction(newtransaction, many) {
     try {
       const docRef = await addDoc(
         collection(db, `user/${user.uid}/transactions`),
         newtransaction
       );
       console.log("Document written with ID: ", docRef.id);
-      if(!many)toast.success("transaction Added!");
+      if (!many) toast.success("transaction Added!");
       let newArray = transaction;
       newArray.push(newtransaction);
       setTransaction(newArray);
       calculateSum();
     } catch (e) {
-      if(!many)console.log("Error while adding document:", e.message);
+      if (!many) console.log("Error while adding document:", e.message);
     }
   }
 
@@ -89,15 +90,40 @@ const Dashboard = () => {
     setIncome(Income);
     setExpanse(Expanse);
   }
-  const sortedTransition = transaction.sort((a,b)=>{
+  const sortedTransition = transaction.sort((a, b) => {
     return new Date(a.date) - new Date(b.date);
-  })
+  });
+
+  // ...
+
+  function clearBalance() {
+    if (user) {
+      const q = query(collection(db, `user/${user.uid}/transactions`));
+      getDocs(q).then((querySnapshot) => {
+        querySnapshot.forEach((document) => {
+          deleteDoc(doc(db, `user/${user.uid}/transactions`, document.id))
+            .then(() => {
+              console.log("Document successfully deleted!");
+            })
+            .catch((error) => {
+              console.error("Error removing document: ", error);
+            });
+        });
+        setTransaction([]);
+        setIncome(0);
+        setExpanse(0);
+        setBalance(0);
+        toast.success("All transactions cleared!");
+      });
+    }
+  }
+
+  // ...
 
   return (
     <>
       {loading ? (
         <div className=" w-full mt-40 flex justify-center items-center h-[60vh] gap-4">
-        
           <div className="loader"></div>
           <p>Loading your Data...</p>
         </div>
@@ -109,6 +135,7 @@ const Dashboard = () => {
             balance={balance}
             setIsExpanseVisible={setIsExpanseVisible}
             setIsIncomeVisible={setIsIncomeVisible}
+            clearBalance={clearBalance}
           />
           <AddIncome
             isIncomeVisible={isIncomeVisible}
@@ -120,8 +147,16 @@ const Dashboard = () => {
             setIsExpanseVisible={setIsExpanseVisible}
             onFinish={onFinish}
           />
-          {transaction.length==0 ?<NoTransition/> :<Chart sortedTransition={sortedTransition}></Chart>}
-          <TransactionTable transaction={transaction} fetchTransition={fetchTransition} addTransaction={addTransaction}/>
+          {transaction.length == 0 ? (
+            <NoTransition />
+          ) : (
+            <Chart sortedTransition={sortedTransition}></Chart>
+          )}
+          <TransactionTable
+            transaction={transaction}
+            fetchTransition={fetchTransition}
+            addTransaction={addTransaction}
+          />
         </div>
       )}
     </>

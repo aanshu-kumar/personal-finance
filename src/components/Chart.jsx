@@ -50,8 +50,8 @@ const Chart = ({ sortedTransition }) => {
   };
 
   return (
-    <div className="w-[95%] mx-auto my-10 flex gap-10">
-      <div className="w-2/3 rounded-lg p-2 shadow-md shadow-gray-300">
+    <div className="w-[95%] mx-auto my-10 flex md:flex-col lg:flex-row gap-10">
+      <div className="w-full lg:w-2/3 hidden  md:flex  flex-col justify-center items-center rounded-lg p-2 shadow-md shadow-gray-300">
         <h2 className="my-1 font-bold">Your Analytics</h2>
         <Line
           {...config}
@@ -60,7 +60,7 @@ const Chart = ({ sortedTransition }) => {
           }}
         />
       </div>
-      <div className="w-1/3 rounded-lg p-2 shadow-md shadow-gray-300">
+      <div className="w-full lg:w-1/3 hidden md:flex flex-col  justify-center items-center rounded-lg p-2 shadow-md shadow-gray-300">
         <h2 className="my-1 font-bold">Your Spends</h2>
         {spendingData.length === 0 ? (
           <p className="text-blue-300 font-bold text-5xl py-5">
